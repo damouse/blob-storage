@@ -1,0 +1,24 @@
+version: "3.5"
+services:
+  mongo:
+    image: mongo
+    container_name: mongodb
+    environment:
+      - PUID=1000
+      - PGID=1000
+    # volumes:
+    # - /home/barry/mongodb/database:/data/db
+    expose:
+      - "27017"
+
+  stocks:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - mongo
+    ports: ["8081:8081"]
+    environment:
+      - DB_URL=mongodb://mongo:27017/
+    volumes:
+      - ./stocks:/app/stocks
